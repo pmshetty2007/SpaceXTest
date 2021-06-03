@@ -1,0 +1,60 @@
+
+//Response Status check
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+//schema check for a attribute and can be extended for complete schema
+const schema={
+    "Type": "object",
+    "properties": {
+        "reused": {"type":"boolean"}
+    }
+};
+pm.test("Validate schema", () => {
+            pm.response.to.have.jsonSchema(schema);
+});
+//Validate header
+pm.test("Content-Type is present", function () {
+    pm.response.to.have.header("Content-Type");
+    pm.expect(pm.response.headers.get("Content-Type")).to.eql("application/json; charset=utf-8")
+    console.log(pm.response.headers.get("Content-Type"))
+});
+
+//Validate attribute type
+pm.test("Validate Type of attribute",function() {
+  const responseJson = pm.response.json();
+  pm.expect(typeof(responseJson.links.youtube_id)).to.eql("string");
+  console.log("type of youtube_id is ",typeof(responseJson.links.youtube_id));
+  
+      
+});
+//Validate values in each attibute
+
+pm.test("Validate Links",function() {
+  const responseJson = pm.response.json();
+  pm.expect(responseJson.links.youtube_id).to.eql("xRu-ekesDyY");
+  console.log("youtube_id is ",responseJson.links.youtube_id);
+  pm.expect(responseJson.links.patch.small).to.eql("https://imgur.com/BrW201S.png");
+  console.log(responseJson.links.patch.small);
+      
+});
+
+//Validate fairings 
+pm.test("Validate fairings",function() {
+  const responseJson = pm.response.json();
+  pm.expect(responseJson.fairings.reused).to.eql(true);
+  pm.expect(responseJson.fairings.recovery_attempt).to.eql(true);
+  pm.expect(responseJson.fairings.recovered).to.eql(true);
+
+  pm.expect(responseJson.fairings.ships[0]).to.eql("5ea6ed2e080df4000697c909");
+  pm.expect(responseJson.fairings.ships[1]).to.eql("5ea6ed2f080df4000697c90c");
+  console.log(responseJson.fairings.ships[0]);
+      
+});
+
+
+
+
+
+

@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "f48e4ef9-106a-4c50-ae24-5a4916b4a437",
+		"name": "SPACEXTEST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SpaceX2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"//Response Status check\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"//schema check for a attribute and can be extended for complete schema\r",
+							"const schema={\r",
+							"    \"Type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"reused\": {\"type\":\"boolean\"}\r",
+							"    }\r",
+							"};\r",
+							"pm.test(\"Validate schema\", () => {\r",
+							"            pm.response.to.have.jsonSchema(schema);\r",
+							"});\r",
+							"//Validate header\r",
+							"pm.test(\"Content-Type is present\", function () {\r",
+							"    pm.response.to.have.header(\"Content-Type\");\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.eql(\"application/json; charset=utf-8\")\r",
+							"    console.log(pm.response.headers.get(\"Content-Type\"))\r",
+							"});\r",
+							"\r",
+							"//Validate attribute type\r",
+							"pm.test(\"Validate Type of attribute\",function() {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(typeof(responseJson.links.youtube_id)).to.eql(\"string\");\r",
+							"  console.log(\"type of youtube_id is \",typeof(responseJson.links.youtube_id));\r",
+							"  \r",
+							"      \r",
+							"});\r",
+							"//Validate values in each attibute\r",
+							"\r",
+							"pm.test(\"Validate Links\",function() {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson.links.youtube_id).to.eql(\"xRu-ekesDyY\");\r",
+							"  console.log(\"youtube_id is \",responseJson.links.youtube_id);\r",
+							"  pm.expect(responseJson.links.patch.small).to.eql(\"https://imgur.com/BrW201S.png\");\r",
+							"  console.log(responseJson.links.patch.small);\r",
+							"      \r",
+							"});\r",
+							"\r",
+							"//Validate fairings \r",
+							"pm.test(\"Validate fairings\",function() {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson.fairings.reused).to.eql(true);\r",
+							"  pm.expect(responseJson.fairings.recovery_attempt).to.eql(true);\r",
+							"  pm.expect(responseJson.fairings.recovered).to.eql(true);\r",
+							"\r",
+							"  pm.expect(responseJson.fairings.ships[0]).to.eql(\"5ea6ed2e080df4000697c909\");\r",
+							"  pm.expect(responseJson.fairings.ships[1]).to.eql(\"5ea6ed2f080df4000697c90c\");\r",
+							"  console.log(responseJson.fairings.ships[0]);\r",
+							"      \r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.spacexdata.com/v4/launches/latest",
+					"protocol": "https",
+					"host": [
+						"api",
+						"spacexdata",
+						"com"
+					],
+					"path": [
+						"v4",
+						"launches",
+						"latest"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
